@@ -13,8 +13,8 @@ func main() {
 
 	//err := router.Run("0.0.0.0:8080")
 
-	certFile := "/etc/letsencrypt/live/server.songmingi.com/fullchain.pem"
-	keyFile := "/etc/letsencrypt/live/server.songmingi.com/privkey.pem"
+	certFile := "/home/mingi4754song/cert/fullchain.pem"
+	keyFile := "/home/mingi4754song/cert/privkey.pem"
 	err := router.RunTLS("0.0.0.0:8080", certFile, keyFile) // RunTLS Test
 
 	if err != nil {
