@@ -48,4 +48,4 @@ jobs:
 
       - name: Run Server Application
         run: |
-          gcloud compute ssh $USER@$INSTANCE_NAME --zone=$ZONE --command="nohup $BUILD_RESULT > ~/server_output.log 2>&1 & exit"
+          gcloud compute ssh $USER@$INSTANCE_NAME --zone=$ZONE --command="nohup ./$BUILD_RESULT > ~/server_output.log 2>&1 & exit"
