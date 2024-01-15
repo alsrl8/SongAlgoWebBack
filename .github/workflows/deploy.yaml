@@ -41,7 +41,7 @@ jobs:
 
       - name: Stop previous running server
         run: |
-          gcloud compute ssh $USER@$INSTANCE_NAME --zone=$ZONE --command="pgrep -f $BUILD_RESULT && sudo pkill -f $BUILD_RESULT || echo 'No process found to stop'"
+          gcloud compute ssh $USER@$INSTANCE_NAME --zone=$ZONE --command="pgrep -f $BUILD_RESULT && sudo pkill -f $BUILD_RESULT"
 
       - name: Transfer to Google Cloud Compute Instance
         run: |
