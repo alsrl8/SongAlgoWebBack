@@ -40,13 +40,11 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
 
       - name: Stop previous running server
-        uses: gcloud compute ssh $USER@$INSTANCE_NAME --zone=$ZONE --command="pgrep -f $BUILD_RESULT && sudo pkill -f $BUILD_RESULT || echo 'No process found to stop'";
+        run: |
+          gcloud compute ssh $USER@$INSTANCE_NAME --zone=$ZONE --command="pgrep -f $BUILD_RESULT && sudo pkill -f $BUILD_RESULT || echo 'No process found to stop'"
 
       - name: Transfer to Google Cloud Compute Instance
         run: |
-          if [ pgrep -f $BUILD_RESULT ]; then
-            gcloud compute ssh $USER@$INSTANCE_NAME --zone=$ZONE --command="sudo pkill -f $BUILD_RESULT";
-          fi
           gcloud compute scp $BUILD_RESULT $USER@$INSTANCE_NAME:~/ --zone=$ZONE
 
       - name: Run Server Application
