@@ -42,7 +42,7 @@ jobs:
       - name: Transfer to Google Cloud Compute Instance
         run: |
           if [ pgrep -f $BUILD_RESULT ]; then
-            gcloud compute ssh $USER@$INSTANCE_NAME --zone=$ZONE --command="sudo pkill -f $BUILD_RESULT"
+            gcloud compute ssh $USER@$INSTANCE_NAME --zone=$ZONE --command="sudo pkill -f $BUILD_RESULT";
           fi
           gcloud compute scp $BUILD_RESULT $USER@$INSTANCE_NAME:~/ --zone=$ZONE
 
