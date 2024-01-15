@@ -11,7 +11,7 @@ func main() {
 
 	router.GET("/chat", chat.RequestHandler)
 
-	err := router.Run("localhost:8080")
+	err := router.Run("0.0.0.0:8080")
 	if err != nil {
 		fmt.Printf("Error running gin router: %s", err)
 		return
