@@ -27,7 +27,7 @@ jobs:
       - name: Display Go version
         run: go version
 
-      - name: Build
+      - name: Build Application
         run: |
           CGO_ENABLED=0 go build -o $BUILD_RESULT .
 
@@ -43,6 +43,6 @@ jobs:
         run: |
           gcloud compute scp ./$BUILD_RESULT $USER@$INSTANCE_NAME:~/ --zone=$ZONE
 
-      - name: Run Game Server
+      - name: Run Server Application
         run: |
-          gcloud compute ssh $USER@$INSTANCE_NAME --zone=$ZONE --command="nohup ./$BUILD_RESULT > ~/game_server_output.log 2>&1 & exit"
+          gcloud compute ssh $USER@$INSTANCE_NAME --zone=$ZONE --command="nohup ./$BUILD_RESULT > ~/server_output.log 2>&1 & exit"
