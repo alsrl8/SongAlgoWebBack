@@ -47,6 +47,9 @@ func RequestHandler(c *gin.Context) {
 
 		mutex.Lock()
 		for client := range clients {
+			if client == ws {
+				continue
+			}
 			if err := client.WriteMessage(messageType, p); err != nil {
 				err := client.Close()
 				if err != nil {
