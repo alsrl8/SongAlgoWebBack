@@ -15,7 +15,7 @@ func main() {
 
 	certFile := "/home/mingi4754song/cert/fullchain.pem"
 	keyFile := "/home/mingi4754song/cert/privkey.pem"
-	err := router.RunTLS("0.0.0.0:8080", certFile, keyFile)
+	err := router.RunTLS("0.0.0.0:443", certFile, keyFile)
 
 	if err != nil {
 		fmt.Printf("Error running gin router: %s", err)
