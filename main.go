@@ -15,7 +15,7 @@ func main() {
 
 	certFile := "/etc/letsencrypt/live/server.songmingi.com/fullchain.pem"
 	keyFile := "/etc/letsencrypt/live/server.songmingi.com/privkey.pem"
-	err := router.RunTLS("0.0.0.0:800", certFile, keyFile)
+	err := router.RunTLS("0.0.0.0:800", certFile, keyFile) // RunTLS Test
 
 	if err != nil {
 		fmt.Printf("Error running gin router: %s", err)
