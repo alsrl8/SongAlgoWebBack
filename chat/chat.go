@@ -1,6 +1,7 @@
 package chat
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -38,37 +39,67 @@ func RequestHandler(c *gin.Context) {
 	mutex.Unlock()
 
 	for {
-		messageType, p, err := ws.ReadMessage()
+		_, messageBytes, err := ws.ReadMessage()
 		if err != nil {
 			return
 		}
 
-		fmt.Printf("%s sent: %s\n", ws.RemoteAddr(), string(p))
-
-		mutex.Lock()
-		for client := range clients {
-			if client == ws {
-				continue
-			}
-			if err := client.WriteMessage(messageType, p); err != nil {
-				err := client.Close()
-				if err != nil {
-					// Error handling needed
-				}
-				delete(clients, client)
-			}
+		var msg Message
+		if err := json.Unmarshal(messageBytes, &msg); err != nil {
+			fmt.Printf("Error unmarshalling message: %v\n", err)
+			continue
 		}
-		mutex.Unlock()
 
-		if err := ws.WriteMessage(messageType, p); err != nil {
-			mutex.Lock()
-			delete(clients, ws)
-			mutex.Unlock()
-			err := ws.Close()
-			if err != nil {
-				// Error handling needed
-			}
-			break
+		fmt.Printf("%+v\n", msg)
+
+		switch msg.Type {
+		case Default:
+			broadcast(msg.Text, ws)
+		case TypingNotification:
+			broadcastTypingNotification(msg.User, ws)
+		}
+	}
+}
+
+// broadcast sends the message to all clients except the sender
+func broadcast(text string, sender *websocket.Conn) {
+	message := Message{
+		Type: Default,
+		User: "user",
+		Text: text,
+	}
+	messageBytes, _ := json.Marshal(message)
+
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	for client := range clients {
+		if client == sender {
+			continue
+		}
+		if err := client.WriteMessage(websocket.TextMessage, messageBytes); err != nil {
+			// Handle error...
+		}
+	}
+}
+
+// broadcastTypingNotification sends a typing notification to all clients except the sender
+func broadcastTypingNotification(user string, sender *websocket.Conn) {
+	notification := Message{
+		Type: TypingNotification,
+		User: user,
+	}
+	notificationBytes, _ := json.Marshal(notification)
+
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	for client := range clients {
+		if client == sender {
+			continue
+		}
+		if err := client.WriteMessage(websocket.TextMessage, notificationBytes); err != nil {
+			// Handle error...
 		}
 	}
 }
