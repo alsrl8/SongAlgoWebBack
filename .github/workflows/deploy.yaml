@@ -47,6 +47,10 @@ jobs:
         run: |
           gcloud compute scp $BUILD_RESULT $USER@$INSTANCE_NAME:~/ --zone=$ZONE
 
+      - name: Set Environment Variables
+        run: |
+          gcloud compute ssh $USER@$INSTANCE_NAME --zone=$ZONE --command="export ENV_TYPE='${{ secrets.ENV_TYPE }}'"
+
       - name: Run Server Application
         run: |
           gcloud compute ssh $USER@$INSTANCE_NAME --zone=$ZONE --command="sudo nohup ./$BUILD_RESULT > ~/server_output.log 2>&1 & exit"

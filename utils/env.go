@@ -3,8 +3,8 @@ package utils
 import "os"
 
 func IsDevelopmentMode() bool {
-	env := GetEnvWithDefault("env-type", "dev")
-	if env == "dev" {
+	env := GetEnvWithDefault("ENV_TYPE", "DEV")
+	if env == "DEV" {
 		return true
 	} else {
 		return false
