@@ -27,4 +27,5 @@ func main() {
 		fmt.Printf("Error running gin router: %s", err)
 		return
 	}
+	fmt.Println("Server is running...")
 }
