@@ -1,9 +1,13 @@
 package utils
 
-import "os"
+import (
+	"fmt"
+	"os"
+)
 
 func IsDevelopmentMode() bool {
 	env := GetEnvWithDefault("ENV_TYPE", "DEV")
+	fmt.Printf("ENV_TYPE: %s\n", env)
 	if env == "DEV" {
 		return true
 	} else {
