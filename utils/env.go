@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"errors"
 	"fmt"
 	"os"
 )
@@ -21,4 +22,12 @@ func GetEnvWithDefault(key, defaultValue string) string {
 		return defaultValue
 	}
 	return value
+}
+
+func GetEnv(key string) (string, error) {
+	value := os.Getenv(key)
+	if value == "" {
+		return "", errors.New("environment variable not set")
+	}
+	return value, nil
 }

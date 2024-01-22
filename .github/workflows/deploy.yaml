@@ -47,13 +47,13 @@ jobs:
         run: |
           gcloud compute scp $BUILD_RESULT $USER@$INSTANCE_NAME:~/ --zone=$ZONE
 
-      - name: Set Environment Variables
-        run: |
-          gcloud compute ssh $USER@$INSTANCE_NAME --zone=$ZONE --command="export ENV_TYPE='${{ secrets.ENV_TYPE }}'"
-
       - name: Run Server Application
         run: |
           gcloud compute ssh $USER@$INSTANCE_NAME --zone=$ZONE --command="\
-          sudo nohup sh -c 'ENV_TYPE=${{ secrets.ENV_TYPE }} ./$BUILD_RESULT' \
+          sudo nohup sh -c '\
+          ENV_TYPE=${{ secrets.ENV_TYPE }} \
+          TLS_CERT_FULLCHAIN_PATH=${{ secrets.TLS_CERT_FULLCHAIN_PATH }} \
+          TLS_CERT_PRIVKEY_PATH=${{ secrets.TLS_CERT_PRIVKEY_PATH }} \
+          ./$BUILD_RESULT' \
           > ~/server_output.log 2>&1 & \
           exit"
