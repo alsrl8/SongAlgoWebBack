@@ -2,6 +2,7 @@ package main
 
 import (
 	"SongAlgoWeb/chat"
+	"SongAlgoWeb/user"
 	"SongAlgoWeb/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -10,6 +11,8 @@ import (
 
 func main() {
 	router := gin.Default()
+
+	router.POST("/auth", user.AuthHandler)
 	router.GET("/chat", chat.RequestHandler)
 
 	if utils.IsDevelopmentMode() {
