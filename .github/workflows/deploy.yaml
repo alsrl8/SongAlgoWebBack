@@ -54,6 +54,8 @@ jobs:
           ENV_TYPE=${{ secrets.ENV_TYPE }} \
           TLS_CERT_FULLCHAIN_PATH=${{ secrets.TLS_CERT_FULLCHAIN_PATH }} \
           TLS_CERT_PRIVKEY_PATH=${{ secrets.TLS_CERT_PRIVKEY_PATH }} \
+          GOOGLE_AUTH_CLIENT_ID=${{ secrets.GOOGLE_AUTH_CLIENT_ID }} \
+          GOOGLE_AUTH_CLIENT_SECRET=${{ secrets.GOOGLE_AUTH_CLIENT_SECRET }} \
           ./$BUILD_RESULT' \
           > ~/server_output.log 2>&1 & \
           exit"
