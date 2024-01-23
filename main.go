@@ -5,12 +5,23 @@ import (
 	"SongAlgoWeb/user"
 	"SongAlgoWeb/utils"
 	"fmt"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"log"
+	"time"
 )
 
 func main() {
 	router := gin.Default()
+
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"}, // Adjust this to be more restrictive if needed
+		AllowMethods:     []string{"GET", "POST", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 
 	router.POST("/auth", user.AuthHandler)
 	router.GET("/chat", chat.RequestHandler)
