@@ -145,7 +145,6 @@ func AuthHandler(c *gin.Context) {
 		return
 	}
 
-	log.Printf("body: %s\n", string(body))
 	tokenResponse, err := getTokenResponseFromResponseBody(body)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

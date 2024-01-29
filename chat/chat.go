@@ -17,6 +17,7 @@ var upgrader = websocket.Upgrader{
 }
 
 var clients = make(map[*websocket.Conn]bool)
+var clientNameMap = make(map[*websocket.Conn]string)
 var mutex = sync.Mutex{}
 
 // RequestHandler handles incoming WebSocket connections
@@ -50,22 +51,26 @@ func RequestHandler(c *gin.Context) {
 			continue
 		}
 
-		fmt.Printf("%+v\n", msg)
-
 		switch msg.Type {
 		case Default:
-			broadcast(msg.Text, ws)
+			handleMsgUser(ws, msg.User)
+			broadcast(ws, msg.Text)
 		case TypingNotification:
 			broadcastTypingNotification(msg.User, ws)
 		}
 	}
 }
 
+// handleMsgUser associates the websocket connection with a user's name
+func handleMsgUser(sender *websocket.Conn, userName string) {
+	clientNameMap[sender] = userName
+}
+
 // broadcast sends the message to all clients except the sender
-func broadcast(text string, sender *websocket.Conn) {
+func broadcast(sender *websocket.Conn, text string) {
 	message := Message{
 		Type: Default,
-		User: "user",
+		User: clientNameMap[sender],
 		Text: text,
 	}
 	messageBytes, _ := json.Marshal(message)
@@ -78,7 +83,7 @@ func broadcast(text string, sender *websocket.Conn) {
 			continue
 		}
 		if err := client.WriteMessage(websocket.TextMessage, messageBytes); err != nil {
-			// Handle error...
+			// TODO Handle error...
 		}
 	}
 }
